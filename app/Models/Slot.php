@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Slot extends Model
 {
@@ -16,4 +17,8 @@ class Slot extends Model
         'start' => 'datetime:H:i',
         'end' => 'datetime:H:i'
     ];
+
+    public function courses(): HasMany{
+        return $this->hasManny(Course::class);
+    }
 }

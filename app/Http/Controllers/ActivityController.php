@@ -13,7 +13,11 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        //
+        // $activities = Activity::all();
+
+        // return view('activities.index', [
+        //     'activities' => $activities,
+        // ]);
     }
 
     /**

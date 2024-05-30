@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Course;
 
 use App\Models\Activity;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
+use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
@@ -25,15 +27,26 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        //
+        // return view('courses.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityRequest $request)
+    public function store(Request $request)
     {
-        //
+        // $data = $request->all();
+
+        // $newActivity = new Activity();
+        // // $newActivity->location = $data['location'];
+        // $newActivity->name = $data['name'];
+        // $newActivity->description = $data['description'];
+        // $newActivity->slot->day = $data['day'];
+        // // $newActivity->slot->start = $data['start'];
+        // // $newActivity->slot->end = $data['end'];
+        // $newActivity->save();
+
+        // return redirect()->route('courses.index', ['id'=>$newActivity->id]);
     }
 
     /**

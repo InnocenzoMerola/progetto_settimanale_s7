@@ -22,4 +22,6 @@ class Course extends Model
     public function users(): BelongsToMany{
         return $this->belongsToMany(User::class)->withPivot('status');
     }
+
+    protected $fillable = ['location', 'activity_id', 'slot_id', 'status'];
 }

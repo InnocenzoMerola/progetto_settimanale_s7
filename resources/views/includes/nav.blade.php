@@ -33,12 +33,17 @@
             </ul>
           </li>
           @auth
-            <li class="nav-item">
-                <a href="{{route('dashboard')}}" class="nav-link">
-                  Dashboard
-                </a>
-              </li>
+          <li class="nav-item">
+            <a href="{{route('dashboard')}}" class="nav-link">
+              Dashboard
+            </a>
+          </li>
           @endauth
+          {{-- @auth
+            @if (['user' => 'admin'])
+              <li class="nav-item"><a class="nav-link" href="{{route('admin.index')}}">Admin</a></li>
+            @endif
+          @endauth --}}
         </ul>
         <ul  class="navbar-nav mb-2 mb-lg-0 me-2">
             @auth

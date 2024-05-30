@@ -22,7 +22,9 @@
             </tr>
         </thead>
         <tbody>
+            TODO: Sistemare per mostrare tutti e non solo quelli in fase di pending
             @foreach ( $courses as $course )
+                {{-- @foreach ( $course->users as  $user)   --}}
                 <tr>
                     <th scope="row">{{$course->id}}</th>
                     <td><a href="{{route('courses.show', ['id' => $course->id])}}">{{$course->activity->name}}</a></td>
@@ -31,21 +33,41 @@
                     <td>{{$course->slot->day}}</td>
                     <td>{{$course->slot->start}}</td>
                     <td>{{$course->slot->end}}</td>
-                    {{-- @auth
-                    @if (Auth::user()->id === $course->user_id) --}}
-                            <td>
-                                <form action="{{route('courses.prenota', ['id'=> $course->id])}}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary">Prenota</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="{{route('courses.destroy', ['id' => $course])}}" method="POST">
-                                    @method('DELETE')
-                                    @csrf
-                                    <button class="btn btn-danger">Elimina</button>
-                                </form>
-                            </td>
+                    @auth
+                    @php
+                            $userCourseStatus = null;
+                            foreach ($course->users as $user) {
+                                if ($user->id === auth()->id()) {
+                                    $userCourseStatus = $user->pivot->status;
+                                    break;
+                                }
+                            }
+                        @endphp
+                    {{-- @if ($course->users->contains(Auth::id())) --}}
+                        @if ($userCourseStatus === 'null')
+                        {{-- @if(['id'=> $course->id, 'user_id' => $user->id]) --}}
+                        <td>
+                            <form action="{{route('courses.prenota', ['id'=> $course->id, 'user_id' => auth()->id()])}}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Prenota</button>
+                            </form>
+                        </td>
+                         @elseif ($userCourseStatus === 'pending')
+                        <td>
+                            <p>In fase di accettazione</p>
+                        </td>
+                        @elseif ($userCourseStatus === 'accepted')
+                        <td>
+                            <form action="{{route('courses.annulla', ['id' => $course->id, 'user_id' =>  auth()->id()])}}" method="POST">
+                                @csrf
+                                <button class="btn btn-danger">Annulla</button>
+                            </form>
+                        </td>
+                        @elseif ($userCourseStatus === 'rejected')
+                        <td>
+                            <p>Rifiutato</p>
+                        </td> 
+                        @endif
                             <td>
                                 <a class="btn btn-success text-white text-decoration-none" href="{{route('courses.edit', ['id'=>$course])}}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
@@ -53,9 +75,34 @@
                                     </svg>
                                 </a>
                             </td>
-                            {{-- @endif
-                    @endauth --}}
+                            {{-- @endif --}}
+                    @endauth
+                    
+                    @auth
+                       @if (auth()->user()->isAdmin())
+                            @foreach ( $course->users as  $user)  
+
+                         {{-- @if ($course->status === 'pending') --}}
+                                @if($user->pivot->status === 'pending')
+                                    <td>
+                                        <form action="{{route('courses.accepted', ['id'=> $course->id, 'user_id' => $user->id])}}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-primary">Accetta</button>
+                                        </form>
+                                        <form action="{{route('courses.rejected', ['id'=> $course->id, 'user_id' => $user->id])}}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-primary">Rifiuta</button>
+                                        </form>
+                                    </td>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endauth
                 </tr>
+                {{-- @endforeach --}}
+
             @endforeach
         </tbody>
     </table>

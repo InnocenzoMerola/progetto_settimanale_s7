@@ -24,7 +24,7 @@ class CourseController extends Controller
 
     public function prenota($id){
         $course = Course::findOrFail($id);
-        Auth::user()->courses()->attach($id, ['status' => 'pending']);
+        Auth::user()->courses()->attach($id, ['status' => 'pending']); //TODO:
         return redirect()->route('courses.index');
     }
 

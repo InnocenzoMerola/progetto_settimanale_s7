@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::factory(5)->create();
+        // User::factory(5)->create();
 
         
     }

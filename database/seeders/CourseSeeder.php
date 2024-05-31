@@ -20,13 +20,13 @@ class CourseSeeder extends Seeder
         $activity_ids = Activity::all()->pluck('id')->all();
         $slot_ids = Slot::all()->pluck('id')->all();
 
-        for ($i=0; $i < 5; $i++) { 
-            DB::table('courses')->insert([
-                'activity_id' => fake()->randomElement($activity_ids),
-                'slot_id' => fake()->randomElement($slot_ids),
-                'location' => fake()->words(rand(1, 3), true)
-            ]);
-        } 
+        // for ($i=0; $i < 5; $i++) { 
+        //     DB::table('courses')->insert([
+        //         'activity_id' => fake()->randomElement($activity_ids),
+        //         'slot_id' => fake()->randomElement($slot_ids),
+        //         'location' => fake()->words(rand(1, 3), true)
+        //     ]);
+        // } 
 
 
         $users = User::all()->all();
@@ -35,7 +35,7 @@ class CourseSeeder extends Seeder
         foreach ($users as $user) {
             $courses_for_user = fake()->randomElements($course_ids, rand(1, count($course_ids)));
             foreach ($courses_for_user as $course_id) {
-                $user->courses()->attach($course_id, ['status' => 'null']);
+                $user->courses()->attach($course_id, ['status' => 'pending']);
             }
         }
     }

@@ -31,8 +31,18 @@
             
             <div class="col-12">
                 <label for="day">Giorno</label>
-                <input type="text" name="day" id="day" class="form-control" required><br>
+                <select class="form-select" name="day" id="day" aria-label="Default select example">
+                <option value="" disabled selected>Seleziona un giorno</option>
+                <option value="Lunedì">Lunedì</option>
+                <option value="Martedì">Martedì</option>
+                <option value="Mercoledì">Mercoledì</option>
+                <option value="Giovedì">Giovedì</option>
+                <option value="Venerdì">Venerdì</option>
+                <option value="6Sabato">Sabato</option>
+                <option value="Domenica">Domenica</option>
+              </select>
             </div>
+
             <div class="col-12">
                 <label for="start">Start</label>
                 <input type="time" name="start" id="start" class="form-control" required><br>

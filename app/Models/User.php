@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -45,6 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected $attribures= [
+        'role' => 'user',
+    ];
 
     public function courses(): BelongsToMany{
         return $this->belongsToMany(Course::class)->withPivot('status');

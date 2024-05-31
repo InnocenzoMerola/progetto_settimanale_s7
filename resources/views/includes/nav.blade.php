@@ -11,25 +11,17 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Progetti
-            </a>
-            {{-- <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{route('projects.index')}}">Lista</a></li>
-                @auth
-                <li><a class="dropdown-item" href="{{route('projects.yourProject')}}">Personali</a></li>
-                <li><a class="dropdown-item" href="{{route('projects.create')}}">Crea</a></li>
-                @endauth
-            </ul> --}}
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Attività
+              Corsi
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{route('courses.index')}}">Lista</a></li>
                 @auth
-                <li><a class="dropdown-item" href="{{route('courses.create')}}">Crea</a></li>
-                @endauth
+                @if(auth()->user()->isAdmin())
+                  <li><a class="dropdown-item" href="{{route('courses.create')}}">Crea</a></li>
+                @endif
+                  
+                @endauth 
+               
             </ul>
           </li>
           @auth

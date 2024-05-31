@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Activity;
 use App\Models\Slot;
 use Illuminate\Http\Request;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 class CourseController extends Controller
 {
@@ -18,8 +19,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('activity', 'slot', 'users')->get();
-
+        $courses = Course::with('activity', 'slot', 'users')->paginate(5);
         return view('courses.index', [
             'courses' => $courses,
         ]);
@@ -29,8 +29,8 @@ class CourseController extends Controller
     public function prenota($id, $user_id){
         $course = Course::findOrFail($id);
         $user = User::find(Auth::id());
-        // $user->courses()->attach($id, ['status' => 'pending']); //TODO:
-        $user->courses()->attach($user_id, ['status' => 'pending']);
+        $user->courses()->attach($id, ['status' => 'pending']); //TODO:
+        // $user->courses()->attach($user_id, ['status' => 'pending']);
 
         return redirect()->route('courses.index');
     }
@@ -82,9 +82,9 @@ class CourseController extends Controller
         $newCourse->slot_id = $newSlot->id;
         $newCourse->save();
 
-        $newCourse->users()->attach(Auth::id(), ['status' => 'pending']);
+        // $newCourse->users()->attach(Auth::id(), ['status' => 'pending']);
 
-        return redirect()->route('courses.index', ['id'=>$newCourse->id]);
+        return redirect()->route('courses.index', ['id'=>$newCourse->id])->with('created_success', $newCourse);
     }
 
     /**
@@ -98,17 +98,38 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Course $course)
+    public function edit(Course $course, $id)
     {
-        //
+        $course = Course::with('activity', 'slot')->findOrFail($id);
+
+        return view('courses.edit', [
+            'course' => $course,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseRequest $request, Course $course)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $course = Course::findOrFail($id);
+        $activity = Activity::findOrFail($course->activity_id);
+        $slot = Slot::findOrFail($course->slot_id);
+
+        $activity->name = $data['name'];
+        $activity->description = $data['description'];
+        $slot->day = $data['day'];
+        $slot->start = $data['start'];
+        $slot->end = $data['end'];
+        $course->location = $data['location'];
+        
+        $activity->save();
+        $slot->save();
+        $course->save();
+
+        return redirect()->route('courses.index', ['id'=>$course->id])->with('created_success', $course);
+
     }
 
     /**
@@ -117,26 +138,50 @@ class CourseController extends Controller
     public function destroy(Request $request, $id)
     {
         $course = Course::findOrFail($id);
-        $course->delete();
-        if($request->user()->id !== $course->user_id) abort('401');
-
-        return redirect()->route('courses.index');
-    }
-
     
+        $course->delete();
+
+        $activity = Activity::findOrFail($course->activity_id);
+        if($activity){
+            $activity->delete();
+        }
+        $slot = Slot::findOrFail($course->slot_id);
+        if($slot){
+            $slot->delete();
+        }
+
+        return redirect()->route('courses.index')->with('deleted_success', $course);;
+    }
 
     
 
 
     public function accepted($id, $user_id){
         $course = Course::findOrFail($id);
-        $course->users()->updateExistingPivot($user_id, ['status' => 'accepted']); //TODO:
-        return redirect()->route('courses.index');
+        $course->users()->updateExistingPivot($user_id, ['status' => 'accepted']);
+        return redirect()->route('dashboard');
     }
 
     public function rejected($id, $user_id){
         $course = Course::findOrFail($id);
-        $course->users()->updateExistingPivot($user_id, ['status' => 'rejected']); //TODO:
-        return redirect()->route('courses.index');;
+        $course->users()->updateExistingPivot($user_id, ['status' => 'rejected']);
+        return redirect()->route('dashboard');;
+    }
+
+
+    public function dashboardControl(){
+
+        // $course = Course::findOrFail($id);
+        if(auth()->user()->role === 'admin'){
+            $courses = Course::with('activity', 'slot', 'users')->paginate(5);
+        }elseif(auth()->user()->role === 'user'){
+
+            $user = User::find(Auth::id());
+            $courses = $user->courses()->with('activity', 'slot')->paginate(5);
+        }
+        
+        return view('dashboard', [
+            'courses' => $courses,
+        ]);
     }
 }

@@ -13,12 +13,12 @@ class SlotSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=0; $i < 5; $i++) { 
-            DB::table('slots')->insert([
-                'day' => 'Lunedì',
-                'start' => '09:10',
-                'end' => '10:10'
-            ]);
-        }
+        // for ($i=0; $i < 2; $i++) { 
+        //     DB::table('slots')->insert([
+        //         'day' => 'Lunedì',
+        //         'start' => '09:10',
+        //         'end' => '10:10'
+        //     ]);
+        // }
     }
 }

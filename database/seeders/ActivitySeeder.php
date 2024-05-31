@@ -13,21 +13,21 @@ class ActivitySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('activities')->insert([
-            'name' => 'Crossfit',
-            'description' => 'Allenamento di crossfit'
-        ]);
+        // DB::table('activities')->insert([
+        //     'name' => 'Crossfit',
+        //     'description' => 'Allenamento di crossfit'
+        // ]);
 
-        DB::table('activities')->insert([
-            'name' => 'Sala',
-            'description' => 'Allenamento in sala pesi'
-        ]);
+        // DB::table('activities')->insert([
+        //     'name' => 'Sala',
+        //     'description' => 'Allenamento in sala pesi'
+        // ]);
 
-        for ($i=0; $i < 3; $i++) { 
-            DB::table('activities')->insert([
-                'name' => fake()->words(rand(1, 3), true),
-                'description' => fake()->words(rand(4, 6), true)
-            ]);
-        }
+        // for ($i=0; $i < 3; $i++) { 
+        //     DB::table('activities')->insert([
+        //         'name' => fake()->words(rand(1, 3), true),
+        //         'description' => fake()->words(rand(4, 6), true)
+        //     ]);
+        // }
     }
 }

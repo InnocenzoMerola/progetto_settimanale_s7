@@ -5,10 +5,11 @@
 
 <h1 class="text-center mb-5">I&M</h1>
 @auth
-  <h2>Ciao <span class="fw-bold">{{Auth::user()->name}}</span> e bentornato sul nostro sito </h2>
+  <h2 class="text-center">Ciao <span class="fw-bold">{{Auth::user()->name}}</span> e bentornato sul nostro sito </h2>
 @endauth
 @guest
-  <h2>Benvenuto sul nostro sito</h2>
+  <h2 class="text-center">Benvenuto sul nostro sito</h2>
+  <h3 class="text-center">Per accedere come admin: enzo@enzo.com, Enzomerola</h3>
 @endguest
 
 <h2 class="text-center mt-3">Le nostre sedi</h2>

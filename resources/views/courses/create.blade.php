@@ -31,7 +31,7 @@
             
             <div class="col-12">
                 <label for="day">Giorno</label>
-                <select class="form-select" name="day" id="day" aria-label="Default select example">
+                <select class="form-select" name="day" id="day" aria-label="Default select example" required>
                 <option value="" disabled selected>Seleziona un giorno</option>
                 <option value="Lunedì">Lunedì</option>
                 <option value="Martedì">Martedì</option>

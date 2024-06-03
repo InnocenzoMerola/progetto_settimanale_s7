@@ -19,6 +19,6 @@ class Slot extends Model
     ];
 
     public function courses(): HasMany{
-        return $this->hasManny(Course::class);
+        return $this->hasMany(Course::class);
     }
 }
